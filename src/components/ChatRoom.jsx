@@ -15,7 +15,13 @@ import {
 
 // Firebase configuration
 const firebaseApp = initializeApp({
-  //...
+  apiKey: "AIzaSyCC6NZCNbDAJNhPjL5BBRjgDxv_EDgkuH4",
+  authDomain: "real-time-chat-01.firebaseapp.com",
+  projectId: "real-time-chat-01",
+  storageBucket: "real-time-chat-01.appspot.com",
+  messagingSenderId: "932483464043",
+  appId: "1:932483464043:web:95ff8e6c38d37300ef2a2e",
+  measurementId: "G-Z1F3FV5K4Q",
 });
 
 const auth = getAuth(firebaseApp);
@@ -32,7 +38,7 @@ const SignOut = () => {
       className="bg-red-500 p-2 text-white rounded-xl absolute right-0 top-0 mr-5 mt-5"
       onClick={() => {
         signOut(auth);
-        // console.log("click sign out");
+        console.log("click sign out");
       }}
     >
       Sign Out
@@ -47,26 +53,20 @@ const ChatMessage = (props) => {
   const myMessage = uid === user.uid;
 
   return (
-    <div
-      className="flex mb-5"
-      style={{
-        float: myMessage ? "right" : "left",
-        alignSelf: myMessage ? "self-end" : "self-start",
-      }}
-    >
+    <div className={`flex mb-5 ${myMessage ? "justify-end" : "justify-start"}`}>
       {myMessage ? (
         <>
           <p className="bg-slate-300 p-2 rounded-xl rounded-tr-none mr-5">
             {text}
           </p>
           {photoURL && (
-            <img src={photoURL} className="rounded-full size-10 mr-2" />
+            <img src={photoURL} className="rounded-full w-10 h-10 mr-2" />
           )}
         </>
       ) : (
         <>
           {photoURL && (
-            <img src={photoURL} className="rounded-full size-10 ml-2" />
+            <img src={photoURL} className="rounded-full w-10 h-10 ml-2" />
           )}
           <p className="bg-slate-300 p-2 rounded-xl rounded-tl-none ml-5">
             {text}
@@ -165,7 +165,7 @@ const ChatRoom = () => {
         {user.photoURL && (
           <img
             src={user.photoURL}
-            className="rounded-full justify-center size-14"
+            className="rounded-full w-14 h-14 justify-center"
           />
         )}
         <div className="flex justify-center items-center ml-5 text-3xl">
@@ -174,18 +174,20 @@ const ChatRoom = () => {
       </div>
 
       <SignOut />
-      <div className="bg-slate-800 w-[80%] max-h-[80vh] flex flex-col justify-center p-5 ml-[10%] mt-5 rounded-xl overflow-y-scroll scrollbar-hide">
-        {messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            message={{
-              text: message.text,
-              uid: message.uid,
-              photoURL: message.photoURL,
-            }}
-          />
-        ))}
-        <div ref={bottomRef}></div>
+      <div className="bg-slate-800 w-[80%] h-[80vh] flex flex-col justify-between p-5 ml-[10%] mt-5 rounded-xl overflow-y-scroll scrollbar-hide">
+        <div className="flex-grow overflow-y-scroll scrollbar-hide">
+          {messages.map((message) => (
+            <ChatMessage
+              key={message.id}
+              message={{
+                text: message.text,
+                uid: message.uid,
+                photoURL: message.photoURL,
+              }}
+            />
+          ))}
+          <div ref={bottomRef}></div>
+        </div>
       </div>
 
       <form
